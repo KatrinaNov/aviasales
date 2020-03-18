@@ -9,6 +9,7 @@ const city = ['Москва', 'Санкт-петербург', 'Минск', 'К
 
 // function expression. Вызывается только после объявления. const get = function() {}
 
+// функция поиска нужного города, который содержит в названии введенные символы в инпут.  и вывода списка с подсказками
 const showCity = (input, list) => {
 
   list.textContent = '';
@@ -28,14 +29,17 @@ const showCity = (input, list) => {
   }
 };
 
+// поиск в инпуте Откуда
 inputCitiesFrom.addEventListener('input', () => {
   showCity(inputCitiesFrom, dropdownCitiesFrom);
 });
 
+// поиск в инпуте Куда
 inputCitiesTo.addEventListener('input', () => {
   showCity(inputCitiesTo, dropdownCitiesTo);
 });
 
+// при клике на список с подсказками выводится нужное название в инпут
 dropdownCitiesFrom.addEventListener('click', (event) => {
   const target = event.target;
   if (target.tagName.toLowerCase() === 'li') {
