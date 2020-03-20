@@ -2,7 +2,8 @@ const formSearch = document.querySelector('.form-search'),
       inputCitiesFrom = document.querySelector('.input__cities-from'),
       dropdownCitiesFrom = document.querySelector('.dropdown__cities-from'),
       inputCitiesTo = document.querySelector('.input__cities-to'),
-      dropdownCitiesTo = document.querySelector('.dropdown__cities-to');
+      dropdownCitiesTo = document.querySelector('.dropdown__cities-to'),
+      inputDateDepart = document.querySelector('.input__date-depart');
 
 const citiesApi = 'dataBase/cities.json',
       proxy = 'https://cors-anywhere.herokuapp.com/',
@@ -56,6 +57,25 @@ const selectCity = (event, input, list) => {
     list.textContent = '';
   }
 };
+const renderCheapDay = (cheapTicket) => {
+  console.log(cheapTicket);
+};
+
+const renderCheapYear = (cheapTickets) => {
+  console.log(cheapTickets);
+};
+
+const renderCheap = (data, date) => {
+  const cheapTicketYear = JSON.parse(data).best_prices;
+
+  const cheapTicketDay = cheapTicketYear.filter((item) => {
+    return item.depart_date === date;
+  });
+
+  renderCheapDay(cheapTicketDay);
+  renderCheapYear(cheapTicketYear);
+
+};
 
 // поиск в инпуте Откуда
 inputCitiesFrom.addEventListener('input', () => {
@@ -76,6 +96,24 @@ dropdownCitiesTo.addEventListener('click', (event) => {
   selectCity(event, inputCitiesTo, dropdownCitiesTo);
 });
 
+formSearch.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const cityFrom = city.find((item) => inputCitiesFrom.value === item.name),
+  cityTo = city.find((item) => inputCitiesTo.value === item.name);
+
+  const formData = {
+    from: cityFrom.code,
+    to: cityTo.code,
+    when: inputDateDepart.value,
+  };
+
+  const requestData = `?depart_date=${formData.when}&origin=${formData.from}&destination=${formData.to}&one_way=true&token=${API_KEY}`;
+  getData(calendar + requestData, (response) => {
+    renderCheap(response, formData.when);
+  });
+});
+
 // вызовы функций
 getData(citiesApi, (data) => city = JSON.parse(data).filter(item => item.name));
 
@@ -84,3 +122,5 @@ getData(citiesApi, (data) => city = JSON.parse(data).filter(item => item.name));
 //     return item.name;
 //   });   
 // });
+
+
